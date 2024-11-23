@@ -4,7 +4,7 @@ import 'package:uas_ez_rent/models/vehicle.dart';
 import 'package:uas_ez_rent/screens/details_screen.dart';
 import 'package:uas_ez_rent/screens/favorite_screen.dart';
 import 'package:uas_ez_rent/screens/history_screen.dart';
-// import 'package:uas_ez_rent/screens/profile_screen.dart';
+import 'package:uas_ez_rent/screens/profile_screen.dart';
 import 'package:uas_ez_rent/widgets/vehicle_card.dart';
 import 'package:uas_ez_rent/widgets/category_item.dart';
 import 'package:uas_ez_rent/widgets/promo_card.dart';
@@ -94,12 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const ProfileScreen(),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
             },
           ),
           PopupMenuButton<String>(

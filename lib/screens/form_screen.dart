@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uas_ez_rent/models/vehicle.dart';
-// import 'package:uas_ez_rent/screens/history_screen.dart';
+import 'package:uas_ez_rent/screens/history_screen.dart';
 
 class FormScreen extends StatefulWidget {
   final Vehicle vehicle;
@@ -399,15 +399,15 @@ class _FormScreenState extends State<FormScreen> {
                           )
                         );
 
-                      //   Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => HistoryScreen(
-                      //       newRental: rentalData,
-                      //     ),
-                      //   ),
-                      //   (route) => false,
-                      // );
+                        Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HistoryScreen(
+                            newRental: rentalData,
+                          ),
+                        ),
+                        (route) => false,
+                      );
                     } else if (_startDate == null || _endDate == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

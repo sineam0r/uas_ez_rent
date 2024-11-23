@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:uas_ez_rent/data/dummy_data.dart';
 import 'package:uas_ez_rent/models/vehicle.dart';
 import 'package:uas_ez_rent/screens/details_screen.dart';
-// import 'package:uas_ez_rent/screens/favorite_screen.dart';
-// import 'package:uas_ez_rent/screens/history_screen.dart';
+import 'package:uas_ez_rent/screens/favorite_screen.dart';
+import 'package:uas_ez_rent/screens/history_screen.dart';
 // import 'package:uas_ez_rent/screens/profile_screen.dart';
 import 'package:uas_ez_rent/widgets/vehicle_card.dart';
 import 'package:uas_ez_rent/widgets/category_item.dart';
@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const Placeholder(),
-    // const FavoritesScreen(),
-    // const HistoryScreen(),
+    const FavoritesScreen(),
+    const HistoryScreen(),
   ];
 
   void _onItemTapped(int index) {

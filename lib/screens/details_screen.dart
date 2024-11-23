@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uas_ez_rent/models/vehicle.dart';
-// import 'package:uas_ez_rent/screens/form_screen.dart';
+import 'package:uas_ez_rent/screens/form_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Vehicle vehicle;
@@ -96,12 +96,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     child: ElevatedButton(
                       onPressed: widget.vehicle.isAvailable
                         ? () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => FormScreen(vehicle: widget.vehicle)
-                          //   )
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FormScreen(vehicle: widget.vehicle)
+                            )
+                          );
                         }
                         : null,
                       style: ElevatedButton.styleFrom(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:uas_ez_rent/providers/auth_provider.dart';
 import 'package:uas_ez_rent/screens/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:uas_ez_rent/screens/home_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const LoginScreen(),
+        home: const HomeScreen(),
       )
     );
   }

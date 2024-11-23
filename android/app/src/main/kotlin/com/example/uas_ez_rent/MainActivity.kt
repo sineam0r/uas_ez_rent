@@ -1,5 +1,6 @@
-package com.example.uas_ez_rent
+package com.ezrent.app
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity: FlutterActivity()
+class MainActivity: FlutterActivity() {
+}

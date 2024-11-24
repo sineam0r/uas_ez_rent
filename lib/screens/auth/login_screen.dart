@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uas_ez_rent/providers/auth_provider.dart';
 import 'package:uas_ez_rent/screens/auth/register_screen.dart';
+import 'package:uas_ez_rent/screens/auth/reset_pw_screen.dart';
 import 'package:uas_ez_rent/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -120,7 +121,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // BUAT FITUR LUPA PASSWORD
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ResetPasswordScreen(),
+                        ),
+                      );
                     },
                     child: const Text('Lupa Password?'),
                   ),

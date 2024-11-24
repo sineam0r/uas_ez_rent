@@ -142,24 +142,60 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> resetPassword(String email) async {
+  Future<bool> checkEmailExists(String email) async {
     try {
       _status = AuthStatus.loading;
       _error = null;
       notifyListeners();
 
-      await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch (error) {
-      _error = switch (error.code) {
-        'invalid-email' => 'Alamat email tidak valid',
-        'user-not-found' => 'Akun tidak ditemukan',
-        _ => 'Terjadi kesalahan saat mengirimkan email reset password'
-      };
+      List<String> signInMethods = await _auth.fetchSignInMethodsForEmail(email);
+      bool exists = signInMethods.isNotEmpty;
+      
+      _status = AuthStatus.unauthenticated;
+      if (!exists) {
+        _error = 'Email tidak terdaftar';
+      }
+      
+      notifyListeners();
+      return exists;
     } catch (e) {
-      _error = 'Terjadi kesalahan yang tidak terduga';
-    } finally {
+      _status = AuthStatus.unauthenticated;
+      _error = 'Terjadi kesalahan saat memeriksa email';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      _status = AuthStatus.loading;
+      _error = null;
+      notifyListeners();
+
+      await _auth.sendPasswordResetEmail(
+        email: email,
+      );
+
       _status = AuthStatus.unauthenticated;
       notifyListeners();
+      return true;
+
+    } on FirebaseAuthException catch (e) {
+      _status = AuthStatus.unauthenticated;
+      _error = switch (e.code) {
+        'invalid-email' => 'Format email tidak valid',
+        'user-not-found' => 'Email tidak terdaftar',
+        'too-many-requests' => 'Terlalu banyak permintaan. Coba lagi nanti',
+        _ => 'Terjadi kesalahan. Silakan coba lagi'
+      };
+      notifyListeners();
+      return false;
+
+    } catch (e) {
+      _status = AuthStatus.unauthenticated;
+      _error = 'Terjadi kesalahan yang tidak diketahui';
+      notifyListeners();
+      return false;
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uas_ez_rent/providers/auth_provider.dart';
+import 'package:uas_ez_rent/providers/user_provider.dart';
 import 'package:uas_ez_rent/screens/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:uas_ez_rent/screens/home_screen.dart';
@@ -11,7 +12,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+    child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const LoginScreen(),
       )
     );
   }

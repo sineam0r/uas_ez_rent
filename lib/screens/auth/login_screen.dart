@@ -27,20 +27,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return 'Email harus diisi';
     }
     if (!value.contains('@') || !value.contains('.')) {
-      return 'Please enter a valid email';
+      return 'Silakan masukkan alamat email yang valid';
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return 'Password harus diisi';
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return 'Password harus minimal 6 karakter';
     }
     return null;
   }

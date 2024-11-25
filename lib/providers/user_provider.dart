@@ -42,9 +42,9 @@ class UserProvider with ChangeNotifier {
   UserData? _userData;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+
   UserData? get userData => _userData;
-  
+
   bool get isProfileComplete {
     return _userData != null &&
         _userData!.nama != null &&

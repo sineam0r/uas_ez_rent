@@ -150,12 +150,12 @@ class AuthProvider extends ChangeNotifier {
 
       List<String> signInMethods = await _auth.fetchSignInMethodsForEmail(email);
       bool exists = signInMethods.isNotEmpty;
-      
+
       _status = AuthStatus.unauthenticated;
       if (!exists) {
         _error = 'Email tidak terdaftar';
       }
-      
+
       notifyListeners();
       return exists;
     } catch (e) {

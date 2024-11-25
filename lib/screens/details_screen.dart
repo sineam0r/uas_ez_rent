@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uas_ez_rent/models/vehicle.dart';
+import 'package:uas_ez_rent/providers/favorite_provider.dart';
 import 'package:uas_ez_rent/screens/form_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Vehicle vehicle;
 
   const DetailsScreen({
-    required this.vehicle, super.key
+    required this.vehicle,super.key
   });
 
   @override
@@ -14,24 +16,26 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  void _toggleFavorite() {
-    setState(() {
-      widget.vehicle.isFavorite = !widget.vehicle.isFavorite;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.vehicle.brand} ${widget.vehicle.nama}'),
         actions: [
-          IconButton(
-            icon: Icon(
-              widget.vehicle.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: widget.vehicle.isFavorite ? Colors.red : null,
-            ),
-            onPressed: _toggleFavorite,
+          Consumer<FavoriteProvider>(
+            builder: (context, favoriteProvider, child) {
+              return IconButton(
+                icon: Icon(
+                  favoriteProvider.isFavorite(widget.vehicle.id)
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: favoriteProvider.isFavorite(widget.vehicle.id)
+                      ? Colors.red
+                      : null,
+                ),
+                onPressed: () => favoriteProvider.toggleFavorite(widget.vehicle.id),
+              );
+            },
           )
         ],
       ),

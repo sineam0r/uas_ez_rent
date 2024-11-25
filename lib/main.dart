@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uas_ez_rent/providers/auth_provider.dart';
+import 'package:uas_ez_rent/providers/favorite_provider.dart';
 import 'package:uas_ez_rent/providers/user_provider.dart';
 import 'package:uas_ez_rent/screens/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
       ],
     child: const MyApp()
     )

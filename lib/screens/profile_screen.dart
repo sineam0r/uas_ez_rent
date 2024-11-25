@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading profile: $e')),
+          SnackBar(content: Text('Gagal memuat profil: $e')),
         );
       }
     } finally {
@@ -102,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error saving profile: $e')),
+            SnackBar(content: Text('Gagal menyimpan profil: $e')),
           );
         }
       } finally {

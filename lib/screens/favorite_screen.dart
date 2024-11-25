@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uas_ez_rent/data/dummy_data.dart';
 import 'package:uas_ez_rent/models/vehicle.dart';
+import 'package:uas_ez_rent/providers/favorite_provider.dart';
 import 'package:uas_ez_rent/screens/details_screen.dart';
 import 'package:uas_ez_rent/screens/history_screen.dart';
 import 'package:uas_ez_rent/screens/home_screen.dart';
@@ -13,7 +15,6 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  List<Vehicle> _favoriteVehicles = [];
   int _selectedIndex = 1;
 
   final List<Widget> _screens = [
@@ -25,7 +26,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   void initState() {
     super.initState();
-    _favoriteVehicles = dummyVehicles.where((v) => v.isFavorite).toList();
+    Future.microtask(() =>
+      Provider.of<FavoriteProvider>(context, listen: false).initializeFavorites()
+    );
+  }
+
+  Future<void> _loadFavorites() async {
+    await context.read<FavoriteProvider>().initializeFavorites();
   }
 
   void _onItemTapped(int index) {
@@ -38,31 +45,55 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     }
   }
 
-  void _toggleFavorite(Vehicle vehicle) {
-    setState(() {
-      vehicle.isFavorite = !vehicle.isFavorite;
-      _favoriteVehicles = dummyVehicles.where((v) => v.isFavorite).toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    _favoriteVehicles = dummyVehicles.where((v) => v.isFavorite).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kendaraan Favorit'),
       ),
-      body: _favoriteVehicles.isEmpty
-          ? _buildEmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: _favoriteVehicles.length,
-              itemBuilder: (context, index) {
-                final vehicle = _favoriteVehicles[index];
-                return _buildFavoriteItem(vehicle);
-              },
-            ),
+      body: Consumer<FavoriteProvider>(
+        builder: (context, favoriteProvider, child) {
+          if (favoriteProvider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (favoriteProvider.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    favoriteProvider.error!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadFavorites,
+                    child: const Text('Coba Lagi'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          final favoriteVehicles = favoriteProvider.getFavoriteVehicles(dummyVehicles);
+          if (favoriteVehicles.isEmpty) {
+            return _buildEmptyState();
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: favoriteVehicles.length,
+            itemBuilder: (context, index) {
+              final vehicle = favoriteVehicles[index];
+              return _buildFavoriteItem(vehicle, favoriteProvider);
+            },
+          );
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.blue,
         currentIndex: _selectedIndex,
@@ -85,7 +116,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 
-  Widget _buildFavoriteItem(Vehicle vehicle) {
+  Widget _buildFavoriteItem(Vehicle vehicle, FavoriteProvider favoriteProvider) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: ListTile(
@@ -105,10 +136,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         ),
         trailing: IconButton(
           icon: Icon(
-            vehicle.isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: vehicle.isFavorite ? Colors.red : Colors.grey,
+            favoriteProvider.isFavorite(vehicle.id)
+                ? Icons.favorite
+                : Icons.favorite_border,
+            color: favoriteProvider.isFavorite(vehicle.id)
+                ? Colors.red
+                : Colors.grey,
           ),
-          onPressed: () => _toggleFavorite(vehicle),
+          onPressed: () => favoriteProvider.toggleFavorite(vehicle.id),
         ),
         onTap: () {
           Navigator.push(
@@ -116,11 +151,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             MaterialPageRoute(
               builder: (context) => DetailsScreen(vehicle: vehicle),
             ),
-          ).then((_) {
-            setState(() {
-              _favoriteVehicles = dummyVehicles.where((v) => v.isFavorite).toList();
-            });
-          });
+          );
         },
       ),
     );
